@@ -1,11 +1,14 @@
-import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
+// Cargar el SDK de EmailJS automáticamente al iniciar
+(function() {
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js";
+    script.onload = function() {
+        emailjs.init({ publicKey: "dcpaDf7g4q7NaNF3j" });
+    };
+    document.head.appendChild(script);
+})();
 
-// Inicializar EmailJS con tu Public Key
-emailjs.init({
-    publicKey: "dcpaDf7g4q7NaNF3j",
-});
-
-window.confirmarReserva = async function(e) {
+async function confirmarReserva(e) {
     e.preventDefault();
 
     const botonEnviar = document.querySelector('.btn-principal');
@@ -19,6 +22,13 @@ window.confirmarReserva = async function(e) {
         const nombre = document.getElementById('nombre').value.trim();
         const telefono = document.getElementById('telefono').value.trim();
         const correo = document.getElementById('correo').value.trim();
+
+        if (!asignatura || !fechaHoraRaw || !nombre || !telefono || !correo) {
+            alert("Por favor completa todos los campos.");
+            botonEnviar.innerHTML = textoOriginal;
+            botonEnviar.disabled = false;
+            return;
+        }
 
         // Formatear la fecha para que se vea legible
         const fechaObj = new Date(fechaHoraRaw);
@@ -65,8 +75,8 @@ window.confirmarReserva = async function(e) {
     }
 }
 
-window.reiniciarReserva = function() {
+function reiniciarReserva() {
     document.getElementById('vista-confirmacion').style.display = 'none';
     document.getElementById('vista-reserva').style.display = 'block';
-    document.querySelector('form').reset();
+    document.getElementById('form-reserva').reset();
 }
