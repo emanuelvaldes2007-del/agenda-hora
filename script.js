@@ -21,13 +21,10 @@ async function confirmarReserva(e) {
             timeStyle: 'short'
         });
 
-        // Envío directo utilizando el formulario mediante EmailJS
-        try {
-            await emailjs.sendForm('service_agenda', 'template_6wyjvlm', formulario);
-            console.log('Correo enviado con éxito al cliente.');
-        } catch (errorEmail) {
-            console.error('Error al enviar correo con EmailJS:', errorEmail);
-        }
+        // Actualizar el campo oculto o temporal de fecha formateada si es necesario, 
+        // o enviar directamente el formulario mediante EmailJS:
+        await emailjs.sendForm('service_agenda', 'template_6wyjvlm', formulario);
+        console.log('Correo enviado con éxito al cliente.');
 
         // Rellenar la tarjeta de confirmación en la página
         document.getElementById('conf-asignatura').textContent = asignatura;
@@ -45,8 +42,8 @@ async function confirmarReserva(e) {
         window.open(linkWhatsApp, '_blank');
 
     } catch (err) {
-        console.error('Error general al confirmar reserva:', err);
-        alert('Ocurrió un inconveniente al procesar la reserva. Intenta nuevamente.');
+        console.error('Error detallado al enviar correo:', err);
+        alert('Ocurrió un error al enviar el correo. Revisa la consola para más detalles.');
     } finally {
         botonEnviar.innerHTML = textoOriginal;
         botonEnviar.disabled = false;
