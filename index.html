@@ -5,16 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamiento de Clases Particulares - Belen Acevedo</title>
     
-    <!-- SDK de EmailJS cargado de forma fija -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
-    <script type="text/javascript">
-       (function(){
-          emailjs.init({
-            publicKey: "dcpaDf7g4q7NaNF3j",
-          });
-       })();
-    </script>
-
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -229,19 +219,36 @@
                     timeStyle: 'short'
                 });
 
-                // Parámetros para tu plantilla 'template_6wyjvlm'
-                const templateParams = {
-                    asignatura: asignatura,
-                    fecha_hora: fechaFormateada,
-                    nombre_alumno: nombre,
-                    telefono_alumno: telefono,
-                    correo_alumno: correo,
-                    to_email: correo
+                // Datos requeridos por la API HTTP de EmailJS
+                const data = {
+                    service_id: 'service_agenda',
+                    template_id: 'template_6wyjvlm',
+                    user_id: 'dcpaDf7g4q7NaNF3j',
+                    template_params: {
+                        asignatura: asignatura,
+                        fecha_hora: fechaFormateada,
+                        nombre_alumno: nombre,
+                        telefono_alumno: telefono,
+                        correo_alumno: correo,
+                        to_email: correo
+                    }
                 };
 
-                // Enviar mediante EmailJS
-                const response = await emailjs.send('service_agenda', 'template_6wyjvlm', templateParams);
-                console.log('Correo enviado con éxito:', response.status, response.text);
+                // Petición HTTP directa que no depende de librerías externas bloqueadas
+                const respuesta = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!respuesta.ok) {
+                    const errorText = await respuesta.text();
+                    throw new Error(errorText || 'Error al conectar con EmailJS');
+                }
+
+                console.log('¡Correo enviado con éxito!');
 
                 // Rellenar datos en la pantalla de éxito
                 document.getElementById('conf-asignatura').textContent = asignatura;
@@ -259,8 +266,8 @@
                 window.open(linkWhatsApp, '_blank');
 
             } catch (err) {
-                console.error('Error detallado al enviar correo:', err);
-                alert('Hubo un problema al enviar el correo. Revisa la consola para más detalles.');
+                console.error('Error detallado al enviar:', err);
+                alert('Hubo un problema al enviar el correo: ' + err.message);
             } finally {
                 botonEnviar.innerHTML = textoOriginal;
                 botonEnviar.disabled = false;
