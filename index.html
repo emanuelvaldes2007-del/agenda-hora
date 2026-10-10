@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamiento de Clases Particulares - Belen Acevedo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- VISTA PRINCIPAL: SELECCIÓN Y FORMULARIO DE RESERVA -->
+    <div id="vista-reserva" class="contenedor-principal">
+        <div class="tarjeta-reserva">
+            <div class="logo-header">
+                📚
+                <h1>Clases Particulares</h1>
+            </div>
+            <h2>Profesora: Belen Acevedo</h2>
+            <p class="sub-desc">Selecciona la asignatura, una fecha y hora disponible, y completa tus datos para agendar.</p>
+
+            <form onsubmit="confirmarReserva(event)">
+                <!-- SELECCIÓN DE ASIGNATURA -->
+                <div class="campo-grupo">
+                    <label for="asignatura">Selecciona la Asignatura:</label>
+                    <select id="asignatura" required>
+                        <option value="" disabled selected>-- Elige una opción --</option>
+                        <option value="Matemáticas">Matemáticas</option>
+                        <option value="Física">Física</option>
+                    </select>
+                </div>
+
+                <!-- SELECCIÓN DE FECHA Y HORA -->
+                <div class="campo-grupo">
+                    <label for="fecha-hora">Fecha y Hora Disponible:</label>
+                    <input type="datetime-local" id="fecha-hora" required>
+                </div>
+
+                <!-- DATOS DEL SOLICITANTE -->
+                <div class="campo-grupo">
+                    <label for="nombre">Nombre Completo:</label>
+                    <input type="text" id="nombre" placeholder="Ej: María González" required autocomplete="off">
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="telefono">Número de Teléfono (WhatsApp):</label>
+                    <input type="tel" id="telefono" placeholder="Ej: +56912345678" required autocomplete="off">
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" id="correo" placeholder="Ej: correo@ejemplo.com" required autocomplete="off">
+                </div>
+
+                <button type="submit" class="btn-principal">Reservar Hora ➔</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- VISTA DE CONFIRMACIÓN DE RESERVA -->
+    <div id="vista-confirmacion" class="contenedor-principal" style="display: none;">
+        <div class="tarjeta-reserva tarjeta-exito">
+            <div class="icono-check">✔</div>
+            <h2>¡Reserva confirmada!</h2>
+            <p class="texto-exito">Tu hora ha sido agendada con éxito.</p>
+            
+            <div class="detalle-reserva">
+                <p><strong>Licenciada:</strong> Belen Acevedo</p>
+                <p><strong>Asignatura:</strong> <span id="conf-asignatura"></span></p>
+                <p><strong>Fecha y Hora:</strong> <span id="conf-fechahora"></span></p>
+                <p><strong>Solicitante:</strong> <span id="conf-nombre"></span></p>
+            </div>
+
+            <p class="alerta-correo">📬 La información detallada fue enviada a tu correo (<span id="conf-correo"></span>) y se notificó a la profesora.</p>
+
+            <button class="btn-principal" onclick="reiniciarReserva()">Agendar otra hora</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
