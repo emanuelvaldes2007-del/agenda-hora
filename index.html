@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamiento de Clases Particulares - Belen Acevedo</title>
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- SDK de EmailJS cargado de forma fija -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init({
+            publicKey: "dcpaDf7g4q7NaNF3j",
+          });
+       })();
+    </script>
 </head>
 <body>
 
@@ -18,7 +28,8 @@
             <h2>Profesora: Belen Acevedo</h2>
             <p class="sub-desc">Selecciona la asignatura, una fecha y hora disponible, y completa tus datos para agendar.</p>
 
-            <form id="form-reserva" onsubmit="confirmarReserva(event)">
+            <!-- QUITAMOS onsubmit y se lo pasaremos directo al botón para evitar recargas -->
+            <form id="form-reserva">
                 <div class="campo-grupo">
                     <label for="asignatura">Selecciona la Asignatura:</label>
                     <select id="asignatura" required>
@@ -48,7 +59,8 @@
                     <input type="email" id="correo" placeholder="Ej: correo@ejemplo.com" required autocomplete="off">
                 </div>
 
-                <button type="submit" class="btn-principal">Reservar Hora ➔</button>
+                <!-- CAMBIAMOS EL BOTÓN PARA QUE LLAME DIRECTAMENTE A LA FUNCIÓN CON onclick -->
+                <button type="button" class="btn-principal" onclick="confirmarReserva(event)">Reservar Hora ➔</button>
             </form>
         </div>
     </div>
@@ -73,7 +85,6 @@
         </div>
     </div>
 
-    <!-- Usamos type="module" para permitir importaciones directas en script.js -->
-    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
