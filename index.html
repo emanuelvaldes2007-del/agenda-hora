@@ -28,9 +28,8 @@
             <h2>Profesora: Belen Acevedo</h2>
             <p class="sub-desc">Selecciona la asignatura, una fecha y hora disponible, y completa tus datos para agendar.</p>
 
-            <!-- SE AÑADIÓ ID Y LOS ATRIBUTOS NAME NECESARIOS PARA EMAILJS -->
+            <!-- FORMULARIO CON ID Y ATRIBUTOS "NAME" EXACTOS -->
             <form id="form-reserva" onsubmit="confirmarReserva(event)">
-                <!-- SELECCIÓN DE ASIGNATURA -->
                 <div class="campo-grupo">
                     <label for="asignatura">Selecciona la Asignatura:</label>
                     <select id="asignatura" name="asignatura" required>
@@ -40,13 +39,11 @@
                     </select>
                 </div>
 
-                <!-- SELECCIÓN DE FECHA Y HORA -->
                 <div class="campo-grupo">
                     <label for="fecha-hora">Fecha y Hora Disponible:</label>
                     <input type="datetime-local" id="fecha-hora" name="fecha_hora" required>
                 </div>
 
-                <!-- DATOS DEL SOLICITANTE -->
                 <div class="campo-grupo">
                     <label for="nombre">Nombre Completo:</label>
                     <input type="text" id="nombre" name="nombre_alumno" placeholder="Ej: María González" required autocomplete="off">

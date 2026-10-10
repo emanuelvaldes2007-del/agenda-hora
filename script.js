@@ -14,17 +14,16 @@ async function confirmarReserva(e) {
         const telefono = document.getElementById('telefono').value.trim();
         const correo = document.getElementById('correo').value.trim();
 
-        // Formatear la fecha para que se vea legible
+        // Formatear la fecha para que se vea legible en la pantalla
         const fechaObj = new Date(fechaHoraRaw);
         const fechaFormateada = isNaN(fechaObj.getTime()) ? fechaHoraRaw : fechaObj.toLocaleString('es-CL', {
             dateStyle: 'full',
             timeStyle: 'short'
         });
 
-        // Actualizar el campo oculto o temporal de fecha formateada si es necesario, 
-        // o enviar directamente el formulario mediante EmailJS:
-        await emailjs.sendForm('service_agenda', 'template_6wyjvlm', formulario);
-        console.log('Correo enviado con éxito al cliente.');
+        // Enviar utilizando el formulario directamente con tu template_6wyjvlm
+        const respuesta = await emailjs.sendForm('service_agenda', 'template_6wyjvlm', formulario);
+        console.log('Correo enviado con éxito:', respuesta.status, respuesta.text);
 
         // Rellenar la tarjeta de confirmación en la página
         document.getElementById('conf-asignatura').textContent = asignatura;
@@ -43,7 +42,7 @@ async function confirmarReserva(e) {
 
     } catch (err) {
         console.error('Error detallado al enviar correo:', err);
-        alert('Ocurrió un error al enviar el correo. Revisa la consola para más detalles.');
+        alert('Hubo un problema al enviar el correo. Revisa la consola para más detalles.');
     } finally {
         botonEnviar.innerHTML = textoOriginal;
         botonEnviar.disabled = false;
