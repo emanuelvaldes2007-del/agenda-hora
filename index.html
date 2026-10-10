@@ -5,10 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamiento de Clases Particulares - Belen Acevedo</title>
     
+    <!-- SDK de EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          emailjs.init({
+            publicKey: "dcpaDf7g4q7NaNF3j",
+          });
+       })();
+    </script>
+
     <style>
+        :root {
+            --color-primario: #7c3aed;
+            --color-secundario: #6d28d9;
+            --color-claro: #f5f3ff;
+            --color-borde: #ddd6fe;
+        }
+
         body {
             font-family: system-ui, -apple-system, sans-serif;
-            background-color: #f4f6f8;
+            background-color: #faf5ff;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -18,45 +35,91 @@
         }
         .contenedor-principal {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
         }
         .tarjeta-reserva {
             background: #ffffff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.08);
+            border-top: 6px solid var(--color-primario);
         }
         .logo-header {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
         }
         h1, h2 {
             text-align: center;
-            color: #1e293b;
+            color: #1e1b4b;
             margin-top: 0;
         }
+        h1 {
+            font-size: 1.5rem;
+            color: var(--color-primario);
+        }
         h2 {
-            font-size: 1.1rem;
-            color: #64748b;
+            font-size: 1.05rem;
+            color: #6b7280;
             margin-bottom: 20px;
         }
         .sub-desc {
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #4b5563;
             text-align: center;
             margin-bottom: 25px;
         }
         .campo-grupo {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
             font-weight: 600;
             font-size: 0.9rem;
-            color: #334155;
-            margin-bottom: 6px;
+            color: #374151;
+            margin-bottom: 8px;
         }
+
+        /* Estilo de Láminas/Tarjetas para Asignaturas */
+        .grid-asignaturas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .tarjeta-asignatura {
+            border: 2px solid var(--color-borde);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+        .tarjeta-asignatura input[type="radio"] {
+            display: none;
+        }
+        .tarjeta-asignatura .icono-asig {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        .tarjeta-asignatura span {
+            font-weight: 600;
+            color: #4b5563;
+            font-size: 0.95rem;
+        }
+        .tarjeta-asignatura:hover {
+            border-color: var(--color-primario);
+            background-color: var(--color-claro);
+        }
+        .tarjeta-asignatura.seleccionada {
+            border-color: var(--color-primario);
+            background-color: var(--color-claro);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+        }
+        .tarjeta-asignatura.seleccionada span {
+            color: var(--color-primario);
+        }
+
         select, input {
             width: 100%;
             padding: 12px;
@@ -66,13 +129,15 @@
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.2s;
+            background-color: #fff;
         }
         select:focus, input:focus {
-            border-color: #0369a1;
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
         .btn-principal {
             width: 100%;
-            background-color: #0369a1;
+            background-color: var(--color-primario);
             color: white;
             border: none;
             padding: 14px;
@@ -84,15 +149,15 @@
             margin-top: 10px;
         }
         .btn-principal:hover {
-            background-color: #0284c7;
+            background-color: var(--color-secundario);
         }
         .tarjeta-exito {
             text-align: center;
         }
         .icono-check {
-            font-size: 3rem;
-            color: #16a34a;
-            background: #dcfce7;
+            font-size: 2.5rem;
+            color: #059669;
+            background: #d1fae5;
             width: 70px;
             height: 70px;
             display: inline-flex;
@@ -102,7 +167,7 @@
             margin-bottom: 15px;
         }
         .texto-exito {
-            color: #16a34a;
+            color: #059669;
             font-weight: 600;
             margin-bottom: 20px;
         }
@@ -134,21 +199,42 @@
             <div class="logo-header">📚</div>
             <h1>Clases Particulares</h1>
             <h2>Profesora: Belen Acevedo</h2>
-            <p class="sub-desc">Selecciona la asignatura, una fecha y hora disponible, y completa tus datos para agendar.</p>
+            <p class="sub-desc">Selecciona la asignatura, la duración, tu horario disponible y completa tus datos.</p>
 
             <form id="form-reserva">
+                <!-- SELECCIÓN DE ASIGNATURA EN FORMATO LÁMINA -->
                 <div class="campo-grupo">
-                    <label for="asignatura">Selecciona la Asignatura:</label>
-                    <select id="asignatura" required>
-                        <option value="" disabled selected>-- Elige una opción --</option>
-                        <option value="Matemáticas">Matemáticas</option>
-                        <option value="Física">Física</option>
+                    <label>Selecciona la Asignatura:</label>
+                    <div class="grid-asignaturas">
+                        <label class="tarjeta-asignatura" id="lbl-matematicas" onclick="seleccionarAsignatura('Matemáticas')">
+                            <input type="radio" name="asignatura" value="Matemáticas" required>
+                            <div class="icono-asig">📐</div>
+                            <span>Matemáticas</span>
+                        </label>
+                        <label class="tarjeta-asignatura" id="lbl-fisica" onclick="seleccionarAsignatura('Física')">
+                            <input type="radio" name="asignatura" value="Física" required>
+                            <div class="icono-asig">⚡</div>
+                            <span>Física</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SELECCIÓN DE DURACIÓN -->
+                <div class="campo-grupo">
+                    <label for="duracion">Duración de la clase:</label>
+                    <select id="duracion" onchange="actualizarHorarios()" required>
+                        <option value="" disabled selected>-- Elige cuántas horas --</option>
+                        <option value="1">1 Hora</option>
+                        <option value="2">2 Horas</option>
                     </select>
                 </div>
 
+                <!-- SELECCIÓN DE HORA DISPONIBLE -->
                 <div class="campo-grupo">
-                    <label for="fecha-hora">Fecha y Hora Disponible:</label>
-                    <input type="datetime-local" id="fecha-hora" required>
+                    <label for="fecha-hora">Fecha y Bloque Horario Disponible:</label>
+                    <select id="fecha-hora" required>
+                        <option value="" disabled selected>-- Primero selecciona la duración --</option>
+                    </select>
                 </div>
 
                 <div class="campo-grupo">
@@ -185,13 +271,57 @@
                 <p><strong>Solicitante:</strong> <span id="conf-nombre"></span></p>
             </div>
 
-            <p class="alerta-correo">📬 La información detallada fue enviada a tu correo (<span id="conf-correo"></span>) y se notificó a la profesora.</p>
+            <p class="alerta-correo">📬 La información detallada fue enviada a tu correo y se notificó a la profesora.</p>
 
             <button class="btn-principal" onclick="reiniciarReserva()">Agendar otra hora</button>
         </div>
     </div>
 
     <script>
+        function seleccionarAsignatura(nombre) {
+            document.querySelectorAll('.tarjeta-asignatura').forEach(t => t.classList.remove('seleccionada'));
+            if (nombre === 'Matemáticas') {
+                document.getElementById('lbl-matematicas').classList.add('seleccionada');
+            } else {
+                document.getElementById('lbl-fisica').classList.add('seleccionada');
+            }
+        }
+
+        function actualizarHorarios() {
+            const duracion = document.getElementById('duracion').value;
+            const selectHora = document.getElementById('fecha-hora');
+            selectHora.innerHTML = '<option value="" disabled selected>-- Selecciona un horario disponible --</option>';
+
+            let opciones = [];
+
+            if (duracion === "1") {
+                opciones = [
+                    "Martes 13/10/2026 - 16:00 a 17:00 hrs",
+                    "Martes 13/10/2026 - 17:00 a 18:00 hrs",
+                    "Miércoles 14/10/2026 - 16:00 a 17:00 hrs",
+                    "Miércoles 14/10/2026 - 17:00 a 18:00 hrs",
+                    "Jueves 15/10/2026 - 16:00 a 17:00 hrs",
+                    "Jueves 15/10/2026 - 17:00 a 18:00 hrs",
+                    "Viernes 16/10/2026 - 16:00 a 17:00 hrs",
+                    "Viernes 16/10/2026 - 17:00 a 18:00 hrs"
+                ];
+            } else if (duracion === "2") {
+                opciones = [
+                    "Martes 13/10/2026 - 18:00 a 20:00 hrs",
+                    "Miércoles 14/10/2026 - 18:00 a 20:00 hrs",
+                    "Jueves 15/10/2026 - 18:00 a 20:00 hrs",
+                    "Viernes 16/10/2026 - 18:00 a 20:00 hrs"
+                ];
+            }
+
+            opciones.forEach(opt => {
+                const optionElement = document.createElement('option');
+                optionElement.value = opt;
+                optionElement.textContent = opt;
+                selectHora.appendChild(optionElement);
+            });
+        }
+
         async function confirmarReserva() {
             const botonEnviar = document.querySelector('.btn-principal');
             const textoOriginal = botonEnviar.innerHTML;
@@ -199,27 +329,20 @@
             botonEnviar.disabled = true;
 
             try {
-                const asignatura = document.getElementById('asignatura').value;
-                const fechaHoraRaw = document.getElementById('fecha-hora').value;
+                const asignaturaInput = document.querySelector('input[name="asignatura"]:checked');
+                const asignatura = asignaturaInput ? asignaturaInput.value : '';
+                const fechaFormateada = document.getElementById('fecha-hora').value;
                 const nombre = document.getElementById('nombre').value.trim();
                 const telefono = document.getElementById('telefono').value.trim();
                 const correo = document.getElementById('correo').value.trim();
 
-                if (!asignatura || !fechaHoraRaw || !nombre || !telefono || !correo) {
-                    alert("Por favor completa todos los campos.");
+                if (!asignatura || !fechaFormateada || !nombre || !telefono || !correo) {
+                    alert("Por favor completa todos los campos y selecciona una asignatura y horario.");
                     botonEnviar.innerHTML = textoOriginal;
                     botonEnviar.disabled = false;
                     return;
                 }
 
-                // Formatear la fecha para que se vea legible
-                const fechaObj = new Date(fechaHoraRaw);
-                const fechaFormateada = isNaN(fechaObj.getTime()) ? fechaHoraRaw : fechaObj.toLocaleString('es-CL', {
-                    dateStyle: 'full',
-                    timeStyle: 'short'
-                });
-
-                // Datos requeridos por la API HTTP de EmailJS
                 const data = {
                     service_id: 'service_agenda',
                     template_id: 'template_6wyjvlm',
@@ -230,16 +353,13 @@
                         nombre_alumno: nombre,
                         telefono_alumno: telefono,
                         correo_alumno: correo,
-                        to_email: correo
+                        to_email: `${correo}, emanuelvaldes2007@gmail.com`
                     }
                 };
 
-                // Petición HTTP directa que no depende de librerías externas bloqueadas
                 const respuesta = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 
@@ -248,20 +368,14 @@
                     throw new Error(errorText || 'Error al conectar con EmailJS');
                 }
 
-                console.log('¡Correo enviado con éxito!');
-
-                // Rellenar datos en la pantalla de éxito
                 document.getElementById('conf-asignatura').textContent = asignatura;
                 document.getElementById('conf-fechahora').textContent = fechaFormateada;
                 document.getElementById('conf-nombre').textContent = nombre;
-                document.getElementById('conf-correo').textContent = correo;
 
-                // Cambiar de vista
                 document.getElementById('vista-reserva').style.display = 'none';
                 document.getElementById('vista-confirmacion').style.display = 'block';
 
-                // Notificación automática a tu WhatsApp (+56965580716)
-                const mensajeWhatsApp = `Hola Belen, tienes una nueva reserva de clases:\n\n📚 Asignatura: ${asignatura}\n🗓️ Fecha: ${fechaFormateada}\n👤 Alumno: ${nombre}\n📞 Teléfono: ${telefono}\n📧 Correo: ${correo}`;
+                const mensajeWhatsApp = `Hola Belen, tienes una nueva reserva de clases:\n\n📚 Asignatura: ${asignatura}\n🗓️ Fecha y Hora: ${fechaFormateada}\n👤 Alumno: ${nombre}\n📞 Teléfono: ${telefono}\n📧 Correo: ${correo}`;
                 const linkWhatsApp = `https://wa.me/56965580716?text=${encodeURIComponent(mensajeWhatsApp)}`;
                 window.open(linkWhatsApp, '_blank');
 
@@ -278,6 +392,8 @@
             document.getElementById('vista-confirmacion').style.display = 'none';
             document.getElementById('vista-reserva').style.display = 'block';
             document.getElementById('form-reserva').reset();
+            document.querySelectorAll('.tarjeta-asignatura').forEach(t => t.classList.remove('seleccionada'));
+            document.getElementById('fecha-hora').innerHTML = '<option value="" disabled selected>-- Primero selecciona la duración --</option>';
         }
     </script>
 </body>
