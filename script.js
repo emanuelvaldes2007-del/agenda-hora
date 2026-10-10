@@ -1,3 +1,13 @@
+// Cargar el SDK de EmailJS de forma automática
+(function() {
+    const script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js";
+    script.onload = function() {
+        emailjs.init({ publicKey: "dcpaDf7g4q7NaNF3j" });
+    };
+    document.head.appendChild(script);
+})();
+
 async function confirmarReserva(e) {
     e.preventDefault();
 
@@ -20,17 +30,17 @@ async function confirmarReserva(e) {
             timeStyle: 'short'
         });
 
-        // Parámetros que coinciden exactamente con las variables de tu template de EmailJS
+        // Parámetros para tu plantilla 'template_6wyjvlm'
         const templateParams = {
             asignatura: asignatura,
             fecha_hora: fechaFormateada,
             nombre_alumno: nombre,
             telefono_alumno: telefono,
             correo_alumno: correo,
-            to_email: correo // Asegura que el correo llegue al destinatario escrito en el input
+            to_email: correo
         };
 
-        // Envío seguro mediante objeto JSON
+        // Enviar mediante EmailJS
         const response = await emailjs.send('service_agenda', 'template_6wyjvlm', templateParams);
         console.log('Correo enviado con éxito:', response.status, response.text);
 
@@ -61,5 +71,5 @@ async function confirmarReserva(e) {
 function reiniciarReserva() {
     document.getElementById('vista-confirmacion').style.display = 'none';
     document.getElementById('vista-reserva').style.display = 'block';
-    document.getElementById('form-reserva').reset();
+    document.querySelector('form').reset();
 }
