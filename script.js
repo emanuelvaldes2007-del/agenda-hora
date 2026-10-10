@@ -7,31 +7,40 @@ async function confirmarReserva(e) {
     botonEnviar.disabled = true;
 
     try {
-        const formulario = document.getElementById('form-reserva');
         const asignatura = document.getElementById('asignatura').value;
         const fechaHoraRaw = document.getElementById('fecha-hora').value;
         const nombre = document.getElementById('nombre').value.trim();
         const telefono = document.getElementById('telefono').value.trim();
         const correo = document.getElementById('correo').value.trim();
 
-        // Formatear la fecha para que se vea legible en la pantalla
+        // Formatear la fecha para que se vea legible
         const fechaObj = new Date(fechaHoraRaw);
         const fechaFormateada = isNaN(fechaObj.getTime()) ? fechaHoraRaw : fechaObj.toLocaleString('es-CL', {
             dateStyle: 'full',
             timeStyle: 'short'
         });
 
-        // Enviar utilizando el formulario directamente con tu template_6wyjvlm
-        const respuesta = await emailjs.sendForm('service_agenda', 'template_6wyjvlm', formulario);
-        console.log('Correo enviado con éxito:', respuesta.status, respuesta.text);
+        // Parámetros que coinciden exactamente con las variables de tu template de EmailJS
+        const templateParams = {
+            asignatura: asignatura,
+            fecha_hora: fechaFormateada,
+            nombre_alumno: nombre,
+            telefono_alumno: telefono,
+            correo_alumno: correo,
+            to_email: correo // Asegura que el correo llegue al destinatario escrito en el input
+        };
 
-        // Rellenar la tarjeta de confirmación en la página
+        // Envío seguro mediante objeto JSON
+        const response = await emailjs.send('service_agenda', 'template_6wyjvlm', templateParams);
+        console.log('Correo enviado con éxito:', response.status, response.text);
+
+        // Rellenar datos en la pantalla de éxito
         document.getElementById('conf-asignatura').textContent = asignatura;
         document.getElementById('conf-fechahora').textContent = fechaFormateada;
         document.getElementById('conf-nombre').textContent = nombre;
         document.getElementById('conf-correo').textContent = correo;
 
-        // Cambiar de vista en la interfaz
+        // Cambiar de vista
         document.getElementById('vista-reserva').style.display = 'none';
         document.getElementById('vista-confirmacion').style.display = 'block';
 

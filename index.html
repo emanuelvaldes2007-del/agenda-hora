@@ -28,11 +28,10 @@
             <h2>Profesora: Belen Acevedo</h2>
             <p class="sub-desc">Selecciona la asignatura, una fecha y hora disponible, y completa tus datos para agendar.</p>
 
-            <!-- FORMULARIO CON ID Y ATRIBUTOS "NAME" EXACTOS -->
             <form id="form-reserva" onsubmit="confirmarReserva(event)">
                 <div class="campo-grupo">
                     <label for="asignatura">Selecciona la Asignatura:</label>
-                    <select id="asignatura" name="asignatura" required>
+                    <select id="asignatura" required>
                         <option value="" disabled selected>-- Elige una opción --</option>
                         <option value="Matemáticas">Matemáticas</option>
                         <option value="Física">Física</option>
@@ -41,22 +40,22 @@
 
                 <div class="campo-grupo">
                     <label for="fecha-hora">Fecha y Hora Disponible:</label>
-                    <input type="datetime-local" id="fecha-hora" name="fecha_hora" required>
+                    <input type="datetime-local" id="fecha-hora" required>
                 </div>
 
                 <div class="campo-grupo">
                     <label for="nombre">Nombre Completo:</label>
-                    <input type="text" id="nombre" name="nombre_alumno" placeholder="Ej: María González" required autocomplete="off">
+                    <input type="text" id="nombre" placeholder="Ej: María González" required autocomplete="off">
                 </div>
 
                 <div class="campo-grupo">
                     <label for="telefono">Número de Teléfono (WhatsApp):</label>
-                    <input type="tel" id="telefono" name="telefono_alumno" placeholder="Ej: +56912345678" required autocomplete="off">
+                    <input type="tel" id="telefono" placeholder="Ej: +56912345678" required autocomplete="off">
                 </div>
 
                 <div class="campo-grupo">
                     <label for="correo">Correo Electrónico:</label>
-                    <input type="email" id="correo" name="correo_alumno" placeholder="Ej: correo@ejemplo.com" required autocomplete="off">
+                    <input type="email" id="correo" placeholder="Ej: correo@ejemplo.com" required autocomplete="off">
                 </div>
 
                 <button type="submit" class="btn-principal">Reservar Hora ➔</button>
