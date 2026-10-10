@@ -5,16 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamiento de Clases Particulares - Belen Acevedo</title>
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- SDK de EmailJS cargado de forma fija y síncrona -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
-    <script type="text/javascript">
-       (function(){
-          emailjs.init({
-            publicKey: "dcpaDf7g4q7NaNF3j",
-          });
-       })();
-    </script>
 </head>
 <body>
 
@@ -83,6 +73,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Usamos type="module" para permitir importaciones directas en script.js -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>

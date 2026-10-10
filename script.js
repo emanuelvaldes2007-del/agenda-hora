@@ -1,4 +1,11 @@
-async function confirmarReserva(e) {
+import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
+
+// Inicializar EmailJS con tu Public Key
+emailjs.init({
+    publicKey: "dcpaDf7g4q7NaNF3j",
+});
+
+window.confirmarReserva = async function(e) {
     e.preventDefault();
 
     const botonEnviar = document.querySelector('.btn-principal');
@@ -58,7 +65,7 @@ async function confirmarReserva(e) {
     }
 }
 
-function reiniciarReserva() {
+window.reiniciarReserva = function() {
     document.getElementById('vista-confirmacion').style.display = 'none';
     document.getElementById('vista-reserva').style.display = 'block';
     document.querySelector('form').reset();
