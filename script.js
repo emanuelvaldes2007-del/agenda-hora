@@ -1,13 +1,3 @@
-// Cargar el SDK de EmailJS de forma automática
-(function() {
-    const script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js";
-    script.onload = function() {
-        emailjs.init({ publicKey: "dcpaDf7g4q7NaNF3j" });
-    };
-    document.head.appendChild(script);
-})();
-
 async function confirmarReserva(e) {
     e.preventDefault();
 
